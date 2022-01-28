@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <Grid container alignItems="stretch">
       <Posts />
-      <Grid item xs={12} sm={3}>
+      <Grid item xs={12} sm={4} md={3}>
         <CreatePost />
         <SearchForm />
       </Grid>

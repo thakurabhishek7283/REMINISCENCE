@@ -6,7 +6,7 @@ export default function NavBar() {
     <AppBar position="static" sx={{ borderRadius: 5, marginY: 3, paddingX: 5 }}>
       <Toolbar>
         <Typography variant="h4" textAlign="center" sx={{ flexGrow: 1 }}>
-          Memories
+          Reminiscence
         </Typography>
         <Button color="error" variant="contained" size="small">
           Login

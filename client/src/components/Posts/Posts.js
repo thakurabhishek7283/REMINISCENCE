@@ -1,24 +1,25 @@
-import { Grid } from "@mui/material";
+import { Grid, CircularProgress } from "@mui/material";
 import Post from "./Post/Post";
+import { useSelector } from "react-redux";
 
 export default function Posts() {
-  return (
+  const { posts, isLoading } = useSelector((state) => state.posts);
+
+  return isLoading ? (
+    <CircularProgress color="secondary" />
+  ) : (
     <Grid
       container
       item
       spacing={2}
       xs={12}
-      sm={9}
+      sm={7}
+      md={9}
       sx={{ display: "flexbox", flexDirection: "row", flexWrap: "wrap" }}
     >
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
+      {posts.map((post) => (
+        <Post post={post} key={post._id} />
+      ))}
     </Grid>
   );
 }
