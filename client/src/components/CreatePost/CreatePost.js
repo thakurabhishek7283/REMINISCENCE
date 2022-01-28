@@ -5,8 +5,24 @@ import {
   Button,
   Typography,
 } from "@mui/material";
+import { createPost } from "../../actions/posts";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function CreatePost() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("profile"));
+  const [postData, setPostData] = useState({
+    title: "",
+    message: "",
+    tags: [],
+    selectedFile: "",
+  });
+  const clear = () => {
+    setPostData({ title: "", message: "", tags: [], selectedFile: "" });
+  };
   const toBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -15,26 +31,55 @@ export default function CreatePost() {
       reader.onerror = (error) => reject(error);
     });
 
+  const handleChange = (e) => {
+    setPostData({ ...postData, [e.target.name]: e.target.value });
+  };
+
   async function handleFileChange(e) {
     const file = e.target.files[0];
     const base64file = await toBase64(file);
-    console.log(base64file);
+    setPostData({ ...postData, selectedFile: base64file });
   }
+
+  const handleSubmit = () => {
+    dispatch(createPost({ ...postData, name: user?.result?.name }, navigate));
+    clear();
+  };
   return (
     <Paper elevation={9} sx={{ padding: 2, minWidth: 300 }}>
       <Typography variant="h6" align="center" sx={{ mb: 1 }}>
         Creating a Memory
       </Typography>
       <FormControl fullWidth>
-        <TextField id="title" variant="outlined" label="title" />
-        <TextField id="message" variant="outlined" label="message" />
+        <TextField
+          id="title"
+          variant="outlined"
+          label="title"
+          value={postData.title}
+          onChange={handleChange}
+        />
+        <TextField
+          id="message"
+          variant="outlined"
+          label="message"
+          multiline
+          value={postData.message}
+          onChange={handleChange}
+        />
 
-        <TextField id="tags" variant="outlined" label="comma separated tags" />
+        <TextField
+          id="tags"
+          variant="outlined"
+          label="comma separated tags"
+          value={postData.tags}
+          onChange={handleChange}
+        />
         <input id="FileUpload" type="file" onChange={handleFileChange} />
         <Button
           variant="contained"
           color="success"
           sx={{ marginY: 1, marginX: 2 }}
+          onClick={handleSubmit}
         >
           Submit
         </Button>

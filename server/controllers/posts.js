@@ -1,9 +1,6 @@
-import express from "express";
 import mongoose from "mongoose";
 
-import PostMessage from "../models/postMessage.js";
-
-const router = express.Router();
+import PostMessage from "../model/postMessage.js";
 
 export const getPosts = async (req, res) => {
   const { page } = req.query;
@@ -152,5 +149,3 @@ export const commentPost = async (req, res) => {
 
   res.json(updatedPost);
 };
-
-export default router;
