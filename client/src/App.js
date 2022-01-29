@@ -3,39 +3,38 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React from "react";
 import NavBar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import PostDetails from "./components/PostDetails/PostDetails";
 import Auth from "./components/Auth/Auth";
-import SearchByCreator from "./components/SearchByCreator";
-import SearchByTags from "./components/SearchByTags";
+import Search from "./components/Search/Search";
 
 function App() {
   const theme = createTheme();
   const user = JSON.parse(localStorage.getItem("profile"));
-  const navigate = useNavigate();
+
   return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
         <React.Fragment>
           <NavBar />
-          <Container maxWidth="xl" sx={{ mt: 6 }}>
+          <Container maxWidth="xl">
             <Routes>
               <Route exact path="/" element={<Home />} />
               <Route exact path="/posts" element={<Home />} />
-              <Route exact path="/posts/:id" element={<PostDetails />} />
               <Route exact path="/posts/search" element={<Home />} />
+              <Route exact path="/posts/:id" element={<PostDetails />} />
+              <Route exact path="/creators/:name" element={<Search />} />
+              <Route exact path="/tags/:name" element={<Search />} />
               <Route
                 exact
                 path="/auth"
-                element={!user ? <Auth /> : navigate("/posts")}
+                element={!user ? <Auth /> : <Navigate replace to="/posts" />}
               />
-              <Route path="/creators/:name" element={<SearchByCreator />} />
-              <Route path="/tags/:name" element={<SearchByTags />} />
             </Routes>
           </Container>
         </React.Fragment>
-      </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 

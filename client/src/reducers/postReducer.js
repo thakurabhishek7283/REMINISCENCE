@@ -25,9 +25,15 @@ export default (state = { isLoading: true, posts: [] }, action) => {
       };
     case FETCH_BY_SEARCH:
     case FETCH_BY_CREATOR:
-      return { ...state, posts: action.payload.data };
+      return {
+        ...state,
+        posts: action.payload.data,
+      };
     case FETCH_POST:
-      return { ...state, post: action.payload.post };
+      return {
+        ...state,
+        post: action.payload.post,
+      };
     case LIKE:
       return {
         ...state,

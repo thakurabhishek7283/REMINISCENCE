@@ -58,7 +58,11 @@ function Auth() {
         <Typography component="h1" variant="h5">
           {isSignup ? "Sign up" : "Sign in"}
         </Typography>
-        <form onSubmit={handleSubmit} className={classes.form}>
+        <form
+          onSubmit={handleSubmit}
+          className={classes.form}
+          autoComplete="off"
+        >
           <Grid container spacing={2}>
             {isSignup && (
               <>
@@ -82,6 +86,7 @@ function Auth() {
               label="Email Address"
               handleChange={handleChange}
               type="email"
+              autoComplete="off"
             />
             <Input
               name="password"
@@ -89,6 +94,7 @@ function Auth() {
               handleChange={handleChange}
               type={showPassword ? "text" : "password"}
               handleShowPassword={handleShowPassword}
+              autoComplete="off"
             />
             {isSignup && (
               <Input

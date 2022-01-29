@@ -4,15 +4,21 @@ import { Typography, CircularProgress, Grid, Divider } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
 import Post from "../Posts/Post/Post";
-import { getPostsByCreator } from "../../actions/posts";
+import { getPostsByCreator, getPostsBySearch } from "../../actions/posts";
 
-const SearchByCreator = () => {
+const Search = () => {
   const { name } = useParams();
   const dispatch = useDispatch();
   const { posts, isLoading } = useSelector((state) => state.posts);
 
+  const location = useLocation();
+
   useEffect(() => {
-    dispatch(getPostsByCreator(name));
+    if (location.pathname.startsWith("/tags")) {
+      dispatch(getPostsBySearch({ tags: name }));
+    } else {
+      dispatch(getPostsByCreator(name));
+    }
   }, []);
 
   if (!posts.length && !isLoading) return "No posts";
@@ -36,4 +42,4 @@ const SearchByCreator = () => {
   );
 };
 
-export default SearchByCreator;
+export default Search;

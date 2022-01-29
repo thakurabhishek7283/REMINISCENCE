@@ -1,31 +1,51 @@
-import { Grid } from "@mui/material";
-import CreatePost from "../CreatePost/CreatePost";
-import SearchForm from "../SearchForm/SearchForm";
-import Posts from "../Posts/Posts";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
+import {
+  Container,
+  Grow,
+  Grid,
+  AppBar,
+  TextField,
+  Button,
+  Paper,
+  OutlinedInput,
+  InputAdornment,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
 import { useDispatch } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
+import ChipInput from "./Chip";
+
 import { getPostsBySearch } from "../../actions/posts";
-import Paginate from "../Pagination/Pagination";
+import Posts from "../Posts/Posts";
+import Form from "../Form/Form";
+import Pagination from "../Pagination/Pagination";
+import useStyles from "./styles";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
-
-export default function Home() {
-  const navigate = useNavigate();
+const Home = () => {
+  const classes = useStyles();
   const query = useQuery();
   const page = query.get("page") || 1;
+  const searchQuery = query.get("searchQuery");
+
+  const [currentId, setCurrentId] = useState(0);
   const dispatch = useDispatch();
+
   const [search, setSearch] = useState("");
-  const [tags, setTags] = useState("");
+  const [tags, setTags] = useState([]);
+  const navigate = useNavigate();
 
   const searchPost = () => {
     if (search.trim() || tags) {
-      dispatch(getPostsBySearch({ search, tags: tags }));
-      navigate(`/posts/search?searchQuery=${search || "none"}&tags=${tags}`);
+      dispatch(getPostsBySearch({ search, tags: tags.join(",") }));
+      navigate.push(
+        `/posts/search?searchQuery=${search || "none"}&tags=${tags.join(",")}`
+      );
     } else {
-      navigate("/");
+      navigate.push("/");
     }
   };
 
@@ -34,31 +54,93 @@ export default function Home() {
       searchPost();
     }
   };
-  const handleChange = (e) => {
-    setSearch(e.target.value);
+
+  const handleAddChip = (e) => {
+    if (e.target.value.includes(",")) {
+      const tagArray = e.target.value.split(",");
+      setTags((prev) => {
+        return [...prev, ...tagArray];
+      });
+      e.target.value = "";
+    }
+  };
+  const handleDeleteChip = (tag) => {
+    setTags((prev) => {
+      return prev.filter((value) => value !== tag);
+    });
   };
 
-  const handleTagSearch = (e) => {
-    setTags(e.target.value);
-  };
   return (
-    <Grid container alignItems="stretch">
-      <Posts />
-      <Grid item xs={12} sm={4} md={3}>
-        <CreatePost />
-        <SearchForm
-          onKeyPress={handleKeyPress}
-          handleChange={handleChange}
-          search={search}
-          tags={tags}
-          handleTagSearch={handleTagSearch}
-        />
-        {!searchQuery && !tags.length && (
-          <Paper className={classes.pagination} elevation={6}>
-            <Paginate page={page} />
-          </Paper>
-        )}
-      </Grid>
-    </Grid>
+    <Grow in>
+      <Container maxWidth="xl">
+        <Grid
+          container
+          justify="space-between"
+          alignItems="stretch"
+          spacing={3}
+          className={classes.gridContainer}
+        >
+          <Grid item xs={12} sm={6} md={9}>
+            <Posts setCurrentId={setCurrentId} />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <AppBar
+              className={classes.appBarSearch}
+              position="static"
+              color="inherit"
+            >
+              <TextField
+                onKeyDown={handleKeyPress}
+                name="search"
+                variant="outlined"
+                label="Search Memories"
+                fullWidth
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <FormControl fullwidth sx={{ mt: 1, mb: 1 }}>
+                <InputLabel htmlFor="chip-input">
+                  Tags(comma seprated)
+                </InputLabel>
+                <OutlinedInput
+                  id="chip-input"
+                  type="text"
+                  startAdornment={
+                    <InputAdornment position="start">
+                      {tags.map((tag, index) => {
+                        return tag ? (
+                          <ChipInput
+                            key={index}
+                            tag={tag}
+                            handleDeleteChip={handleDeleteChip}
+                          />
+                        ) : null;
+                      })}
+                    </InputAdornment>
+                  }
+                  onChange={handleAddChip}
+                />
+              </FormControl>
+              <Button
+                onClick={searchPost}
+                className={classes.searchButton}
+                variant="contained"
+                color="primary"
+              >
+                Search
+              </Button>
+            </AppBar>
+            <Form currentId={currentId} setCurrentId={setCurrentId} />
+            {!searchQuery && !tags.length && (
+              <Paper className={classes.pagination} elevation={6}>
+                <Pagination page={page} />
+              </Paper>
+            )}
+          </Grid>
+        </Grid>
+      </Container>
+    </Grow>
   );
-}
+};
+
+export default Home;
