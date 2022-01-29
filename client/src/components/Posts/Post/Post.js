@@ -78,13 +78,13 @@ const Post = ({ post, setCurrentId }) => {
         name="test"
         onClick={openPost}
       >
-        <img
-          className={classes.media}
-          src={
+        <CardMedia
+          image={
             post.selectedFile ||
             "https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png"
           }
           title={post.title}
+          className={classes.media}
         />
         <div className={classes.overlay}>
           <Typography variant="h6">{post.name}</Typography>
@@ -94,7 +94,7 @@ const Post = ({ post, setCurrentId }) => {
         </div>
         {(user?.result?.googleId === post?.creator ||
           user?.result?._id === post?.creator) && (
-          <div name="edit" className={classes.overlay2}>
+          <div className={classes.overlay2} name="edit">
             <Button
               onClick={(e) => {
                 e.stopPropagation();
@@ -107,11 +107,15 @@ const Post = ({ post, setCurrentId }) => {
             </Button>
           </div>
         )}
-        <div className={classes.details}>
-          <Typography variant="body2" color="textSecondary" component="h2">
-            {post.tags.map((tag) => `#${tag} `)}
-          </Typography>
-        </div>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          component="h2"
+          className={classes.details}
+        >
+          {post.tags.map((tag) => `#${tag} `)}
+        </Typography>
+
         <Typography
           gutterBottom
           variant="h5"

@@ -31,7 +31,7 @@ const Form = ({ currentId, setCurrentId }) => {
   const classes = useStyles();
   const user = JSON.parse(localStorage.getItem("profile"));
   const navigate = useNavigate();
-  const [ttags, setTags] = useState([]);
+  const [ttags, setTags] = useState([...postData.tags]);
 
   const toBase64 = (file) =>
     new Promise((resolve, reject) => {
