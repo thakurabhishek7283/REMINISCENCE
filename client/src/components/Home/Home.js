@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { getPostsBySearch } from "../../actions/posts";
+import Paginate from "../Pagination/Pagination";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -52,6 +53,11 @@ export default function Home() {
           tags={tags}
           handleTagSearch={handleTagSearch}
         />
+        {!searchQuery && !tags.length && (
+          <Paper className={classes.pagination} elevation={6}>
+            <Paginate page={page} />
+          </Paper>
+        )}
       </Grid>
     </Grid>
   );

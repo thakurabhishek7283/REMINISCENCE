@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 export default function Posts() {
   const { posts, isLoading } = useSelector((state) => state.posts);
 
+  if (!posts.length && !isLoading) return "No posts";
+
   return isLoading ? (
     <CircularProgress color="secondary" />
   ) : (

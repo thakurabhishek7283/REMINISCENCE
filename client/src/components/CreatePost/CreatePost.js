@@ -41,10 +41,22 @@ export default function CreatePost() {
     setPostData({ ...postData, selectedFile: base64file });
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     dispatch(createPost({ ...postData, name: user?.result?.name }, navigate));
     clear();
   };
+
+  if (!user?.result?.name) {
+    return (
+      <Paper className={classes.paper} elevation={6}>
+        <Typography variant="h6" align="center">
+          Please Sign In to create your own memories and like other's memories.
+        </Typography>
+      </Paper>
+    );
+  }
+
   return (
     <Paper elevation={9} sx={{ padding: 2, minWidth: 300 }}>
       <Typography variant="h6" align="center" sx={{ mb: 1 }}>
@@ -52,14 +64,14 @@ export default function CreatePost() {
       </Typography>
       <FormControl fullWidth>
         <TextField
-          id="title"
+          name="title"
           variant="outlined"
           label="title"
           value={postData.title}
           onChange={handleChange}
         />
         <TextField
-          id="message"
+          name="message"
           variant="outlined"
           label="message"
           multiline
@@ -68,13 +80,13 @@ export default function CreatePost() {
         />
 
         <TextField
-          id="tags"
+          name="tags"
           variant="outlined"
           label="comma separated tags"
           value={postData.tags}
           onChange={handleChange}
         />
-        <input id="FileUpload" type="file" onChange={handleFileChange} />
+        <input name="FileUpload" type="file" onChange={handleFileChange} />
         <Button
           variant="contained"
           color="success"
@@ -87,6 +99,7 @@ export default function CreatePost() {
           variant="contained"
           color="primary"
           sx={{ marginBottom: 1, marginX: 2 }}
+          onClick={clear}
         >
           Clear
         </Button>
