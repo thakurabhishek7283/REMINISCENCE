@@ -70,11 +70,15 @@ const Form = ({ currentId, setCurrentId }) => {
       clear();
     } else {
       dispatch(
-        updatePost(currentId, {
-          ...postData,
-          tags: ttags,
-          name: user?.result?.name,
-        })
+        updatePost(
+          currentId,
+          {
+            ...postData,
+            tags: ttags,
+            name: user?.result?.name,
+          },
+          navigate
+        )
       );
       clear();
     }

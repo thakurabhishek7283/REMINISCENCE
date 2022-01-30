@@ -86,11 +86,12 @@ export const createPost = (post, navigate) => async (dispatch) => {
   }
 };
 
-export const updatePost = (id, post) => async (dispatch) => {
+export const updatePost = (id, post, navigate) => async (dispatch) => {
   try {
     const { data } = await api.updatePost(id, post);
 
     dispatch({ type: UPDATE, payload: data });
+    navigate("/posts");
   } catch (error) {
     console.log(error);
   }

@@ -3,9 +3,8 @@ import { AppBar, Typography, Toolbar, Avatar, Button } from "@mui/material";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import decode from "jwt-decode";
-
+import momentousText from "../../images/momentousText.png";
 import memoriesLogo from "../../images/memoriesLogo.png";
-import memoriesText from "../../images/memoriesText.png";
 import * as actionType from "../../constants/actionTypes";
 import useStyles from "./styles";
 
@@ -42,7 +41,7 @@ const Navbar = () => {
         <img
           component={Link}
           to="/"
-          src={memoriesText}
+          src={momentousText}
           alt="icon"
           height="45px"
         />

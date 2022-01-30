@@ -23,6 +23,9 @@ try {
   console.log(error);
 }
 
+app.get("/", (req, res) => {
+  res.send("hello to my first web app");
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`server is listening on port ${PORT}`);
